@@ -37,7 +37,15 @@ public class RiddlesProtocol {
                 output = "BYE!";
                 state = 0;
             }
-
+        }
+        else if (state == 2) {
+            if (input.equalsIgnoreCase(answers[currentRiddle])) {
+                output = "Correct! Do you want another riddle? (y/n)";
+                currentRiddle++;
+            } else {
+                output = "BYE!";
+            }
+        }
 
     }
 }
