@@ -2,7 +2,8 @@ import java.net.*;
 import java.io.*;
 
 public class RiddlesProtocol {
-    private int state = 0; // 0 = waiting, 1 = asking riddle, 2 = waiting for answer
+    // 0 = start prompt, 1 = yes/no response, 2 = waiting for riddle answer
+    private int state = 0;
     private int currentRiddle = 0;
 
     private String[] riddles = {
@@ -27,22 +28,22 @@ public class RiddlesProtocol {
         String output = null;
 
         switch (state) {
-            case 0: // initial prompt
+            case 0: // ask if user wants to play
                 output = "Do you want to solve riddles? (y/n)";
                 state = 1;
                 break;
 
-            case 1: // waiting for yes/no to start or continue
+            case 1: // handle yes/no response
                 if (input.equalsIgnoreCase("y")) {
                     output = riddles[currentRiddle];
-                    state = 2; // now waiting for the answer
+                    state = 2;
                 } else {
                     output = "BYE!";
                     state = 0;
                 }
                 break;
 
-            case 2: // waiting for answer
+            case 2: // check riddle answer
                 if (input.equalsIgnoreCase(answers[currentRiddle])) {
                     currentRiddle++;
                     if (currentRiddle >= riddles.length) {
@@ -51,11 +52,11 @@ public class RiddlesProtocol {
                         currentRiddle = 0;
                     } else {
                         output = "Correct! Do you want another riddle? (y/n)";
-                        state = 1; // go back to asking if user wants another
+                        state = 1;
                     }
                 } else {
                     output = "Wrong! Here's a clue: " + clues[currentRiddle];
-                    // stay in state 2 to let user try again
+                    // stay in state 2 to retry
                 }
                 break;
         }
